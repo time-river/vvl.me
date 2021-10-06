@@ -99,6 +99,24 @@ ignore:
 ## Themes: https://hexo.io/themes/
 theme: hexo-theme-next
 
+# Excerpt, see: https://github.com/theme-next/hexo-theme-next/issues/1164
+excerpt:
+  depth: 3
+  excerpt_excludes: []
+  more_excludes: []
+  hideWholePostExcerpts: true
+
+# Demo: https://utteranc.es/  http://trumandu.github.io/about/
+utteranc:
+  enable: true
+  repo: time-river/vvl.me #Github repo such as :TrumanDu/comments
+  pathname: pathname
+  # theme: github-light,github-dark,github-dark-orange
+  theme: github-light
+  cdn: https://utteranc.es/client.js
+  # If you want to modify priority, please config in **hexo**
+  #priority:
+
 # Deployment
 ## Docs: https://hexo.io/docs/one-command-deployment
 deploy:

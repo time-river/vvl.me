@@ -2,3 +2,7 @@
 	path = themes/hexo-theme-next
 	url = https://github.com/theme-next/hexo-theme-next.git
 	branch = master
+[submodule "source/lib/fancybox"]
+	path = source/lib/fancybox
+	url = https://github.com/theme-next/theme-next-fancybox3.git
+	branch = master
