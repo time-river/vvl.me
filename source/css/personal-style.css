@@ -1,0 +1,26 @@
+pre {
+  white-space: pre !important;
+}
+code,
+pre,
+pre code,
+pre code samp
+{
+  font-family: 'Ubuntu Mono', Consolas, monospace !important;
+}
+@font-face {
+    font-family: "SentyZHAO";
+    src: url("/fonts/SentyZHAO.eot"); /* IE9 */
+    src: url("/fonts/SentyZHAO.eot?#iefix") format("embedded-opentype"), /* IE6-IE8 */
+    url("/fonts/SentyZHAO.woff") format("woff"), /* chrome, firefox */
+    url("/fonts/SentyZHAO.ttf") format("truetype"), /* chrome, firefox, opera, Safari, Android, iOS 4.2+ */
+    url("/fonts/SentyZHAO.svg#SentyZHAO") format("svg"); /* iOS 4.1- */
+    font-style: normal;
+    font-weight: normal;
+}
+.name {
+  font-weight: normal !important;
+}
+.slogan {
+  font-family: SentyZHAO !important;
+}

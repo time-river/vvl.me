@@ -1,0 +1,60 @@
+name: vvl.me
+
+on: [push, pull_request]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: true  # Fetch Hugo themes (true OR recursive)
+          fetch-depth: 0    # Fetch all history for .GitInfo and .Lastmod
+
+      # Caching dependencies to speed up workflows. (GitHub will remove any cache entries that have not been accessed in over 7 days.)
+      - name: Cache node modules
+        uses: actions/cache@v1
+        id: cache
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+      - name: Install Dependencies
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: npm ci
+
+      - name: Build
+        run: npx hexo generate
+
+      - name: IPFS Pinata service deploy
+        id: pinata
+        uses: anantaramdas/ipfs-pinata-deploy-action@v1.6.4
+        if: github.ref == 'refs/heads/master'
+        with:
+          pin-name: 'vvl.me'
+          path: './public'
+          pinata-api-key: ${{ secrets.PINATA_PRIVATE_KEY }}
+          pinata-secret-api-key: ${{ secrets.PINATA_SECRET_API_KEY }}
+          verbose: true
+          remove-old: true
+
+      - name: Update DNSLink
+        id: dnslink
+        env:
+          CLOUDFLARE_TOKEN: ${{ secrets.CLOUDFLARE_TOKEN }}
+          RECORD_DOMAIN: "vvl.me"
+          RECORD_NAME: "_dnslink"
+          CLOUDFLARE_ZONE_ID: ${{ secrets.CLOUDFLARE_ZONE_ID }}
+        uses: textileio/cloudflare-update-dnslink@master
+        if: github.ref == 'refs/heads/master'
+        with:
+          cid: ${{ steps.pinata.outputs.hash }}
+
+      - name: Purge cache
+        uses: jakejarvis/cloudflare-purge-action@master
+        if: github.ref == 'refs/heads/master'
+        env:
+          # Zone is required by both authentication methods
+          CLOUDFLARE_ZONE: ${{ secrets.CLOUDFLARE_ZONE_ID }}
+          CLOUDFLARE_TOKEN: ${{ secrets.CLOUDFLARE_TOKEN }}
